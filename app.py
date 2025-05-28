@@ -1,3 +1,5 @@
+import json
+
 lista = { #criar um dicionrio de lista de tarefas
     'id': '1',
     'titulo': 'Fazer essa lista',
@@ -7,6 +9,13 @@ lista = { #criar um dicionrio de lista de tarefas
 tarefas = [] #criar a lista onde ficara armazenada
 
 proximo_id = 1 #somador
+
+
+def salvar_dados(nome_arquivo='tarefas.json'):
+    global tarefas
+    with open(nome_arquivo, 'w') as f:
+        json.dump(tarefas, f)
+
 
 def adicionar_tarefa(titulo, descricao=''): ## deixa descricao como opcional
     global proximo_id #puxa a variavel de fora quando global
@@ -39,6 +48,7 @@ def listar_tarefas():
                 print('Status: Pendente')
             print('--------------------\n')
 
+salvar_dados()
 
 def marcar_tarefa_concluida(id_tarefa):
     encontrada = False #reseta o valor
@@ -53,6 +63,7 @@ def marcar_tarefa_concluida(id_tarefa):
     if not encontrada:
         print(f'ERROR: Tarefa com ID {task['id']} não encontrada.')
                 
+salvar_dados()
 
 def remover_tarefa(id_tarefa):
     encontrada = False
@@ -67,6 +78,9 @@ def remover_tarefa(id_tarefa):
     if not encontrada:
          print(f'Tarefa com ID {id_tarefa} não encontrada')
 
+
+salvar_dados()
+
 def exibir_menu():
     print('''
             --- MENU DA TO-DO LIST ---
@@ -77,41 +91,48 @@ def exibir_menu():
             5. Sair
             --------------------------
           ''')
+    
+
 
 def main():
     while True:
         exibir_menu()
-        opcao = int(input('Digite a opcao desejada'))
+        opcao = int(input('Digite a opcao desejada: '))
         if opcao == 1:
-            titulo = str(input('Digite o titulo da task'))
-            descricao = str(input('Descricao (opcional)'))
-            adicionar_tarefa(titulo=str, descricao='')
+            titulo = str(input('Digite o titulo da task: '))
+            descricao = str(input('Descricao (opcional): '))
+            adicionar_tarefa(titulo, descricao)
         elif opcao == 2:
             listar_tarefas()
         elif opcao == 3:
-            marcar_tarefa_concluida(id_tarefa=int)
+            id = int(input('Digite o ID da tarefa que deseja concluir: '))
+            marcar_tarefa_concluida(id)
         elif opcao == 4:
-            remover_tarefa(id_tarefa=int)
+            id = int(input('Digite o ID da tarefa que deseja excluir: '))
+            remover_tarefa(id)
         elif opcao == 5:
-            print('Saindo')
+            print('Saindo...')
+            salvar_dados()
+            break
         else :
-            print('Opcao invalidada')
+            print('Opcao invalidada!')
             
+if __name__ == '__main__':
+    main()
 
 
-
-adicionar_tarefa('Estudar Python', 'Revisar listas e dicionários')
+'''adicionar_tarefa('Estudar Python', 'Revisar listas e dicionários')
 adicionar_tarefa('Fazer compras', 'Comprar frutas e verduras')
 adicionar_tarefa('pagar contar')
 
 print("\n--- Marcando tarefas ---")
-marcar_tarefa_concluida(1) # Tente marcar a primeira tarefa
+marcar_tarefa_concluida(1) # Tente marcar a primeira 
 marcar_tarefa_concluida(99) # Tente marcar uma tarefa que não existe
 
 print("\n--- Removendo tarefas ---")
 remover_tarefa(2) # Tente remover a tarefa com ID 2
-remover_tarefa(99) # Tente remover uma tarefa que não existe
+remover_tarefa(99) # Tente remover uma tarefa que não existe'''
 
-print("\n--- Lista de tarefas após marcar ---")
+# print("\n--- Lista de tarefas após marcar ---")
 
-listar_tarefas()
+# listar_tarefas()
