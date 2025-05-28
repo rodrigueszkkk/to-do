@@ -16,6 +16,16 @@ def salvar_dados(nome_arquivo='tarefas.json'):
     with open(nome_arquivo, 'w') as f:
         json.dump(tarefas, f)
 
+def carregar_dados(nome_arquivo='tarefas.json'):
+    global tarefas
+    try:
+        with open(nome_arquivo, 'r'):
+            json.load(tarefas)
+    for id in tarefas:
+        > proximo_id    
+
+
+
 
 def adicionar_tarefa(titulo, descricao=''): ## deixa descricao como opcional
     global proximo_id #puxa a variavel de fora quando global
@@ -92,7 +102,6 @@ def exibir_menu():
             --------------------------
           ''')
     
-
 
 def main():
     while True:
