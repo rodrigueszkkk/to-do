@@ -84,6 +84,7 @@ def main():
         opcao = int(input('Digite a opcao desejada'))
         if opcao == 1:
             titulo = str(input('Digite o titulo da task'))
+            descricao = str(input('Digite a descricao (opcional)'))
             adicionar_tarefa(titulo=str, descricao='')
         elif opcao == 2:
             listar_tarefas()
