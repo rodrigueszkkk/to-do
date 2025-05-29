@@ -19,11 +19,30 @@ def salvar_dados(nome_arquivo='tarefas.json'):
 def carregar_dados(nome_arquivo='tarefas.json'):
     global tarefas
     try:
-        with open(nome_arquivo, 'r'):
-            json.load(tarefas)
-    for id in tarefas:
-        > proximo_id    
+        with open(nome_arquivo, 'r') as f:
+            dados_carregados = json.load(f)
 
+        maior_id = 0
+        if dados_carregados:
+            for tarefa in dados_carregados:
+                if tarefa['id'] > maior_id:
+                    maior_id = tarefa['id']
+            proximo_id = maior_id + 1
+        else:
+            proximo_id = 1
+
+        return dados_carregados
+    
+
+    except FileNotFoundError:
+        print(f'Arquivo: {nome_arquivo} nao encontrado')
+        proximo_id = 1
+        return []
+    
+    except json.JSONDecodeError:
+        print(f'Erro ao ler o arquivo: {nome_arquivo}')
+        proximo_id = 1
+        return []
 
 
 
@@ -39,6 +58,7 @@ def adicionar_tarefa(titulo, descricao=''): ## deixa descricao como opcional
     proximo_id += 1 #aumentar o contador
 
     print(f'Tarefa adicionada: {titulo}')
+    salvar_dados()
     
 
 
@@ -58,7 +78,6 @@ def listar_tarefas():
                 print('Status: Pendente')
             print('--------------------\n')
 
-salvar_dados()
 
 def marcar_tarefa_concluida(id_tarefa):
     encontrada = False #reseta o valor
@@ -68,12 +87,14 @@ def marcar_tarefa_concluida(id_tarefa):
             task['concluida'] = True # = atribuição
             print(f'Tarefa: {task['titulo']}, (ID: {task['id']})  foi concluida')
             encontrada = True #redefine a função
+            salvar_dados()
             break #quebra o loop
+
 
     if not encontrada:
         print(f'ERROR: Tarefa com ID {task['id']} não encontrada.')
-                
-salvar_dados()
+    
+
 
 def remover_tarefa(id_tarefa):
     encontrada = False
@@ -83,13 +104,15 @@ def remover_tarefa(id_tarefa):
             print(f'Tarefa: {task['titulo']} (ID {task['id']}) removida com suceso')
             tarefas.remove(task)
             encontrada = True
+            salvar_dados()
             break
     
     if not encontrada:
          print(f'Tarefa com ID {id_tarefa} não encontrada')
+    
 
 
-salvar_dados()
+
 
 def exibir_menu():
     print('''
@@ -104,6 +127,9 @@ def exibir_menu():
     
 
 def main():
+    global tarefas
+    tarefas = carregar_dados()
+
     while True:
         exibir_menu()
         opcao = int(input('Digite a opcao desejada: '))
